@@ -5,9 +5,11 @@ scalaVersion := "2.10.6"
 libraryDependencies += "org.apache.kafka" % "kafka_2.10" % "0.9.0.1"
 libraryDependencies += "org.apache.kafka" % "kafka-clients" % "0.9.0.1"
 
-libraryDependencies += "org.apache.hbase" % "hbase-client" % "1.2.1"
-libraryDependencies += "org.apache.hbase" % "hbase-server" % "1.2.1"
-libraryDependencies += "org.apache.hbase" % "hbase-common" % "1.2.1"
+//libraryDependencies += "org.apache.hbase" % "hbase-client" % "1.2.1"
+//libraryDependencies += "org.apache.hbase" % "hbase-server" % "1.2.1"
+//libraryDependencies += "org.apache.hbase" % "hbase-common" % "1.2.1"
+
+libraryDependencies += "it.nerdammer.bigdata" % "spark-hbase-connector_2.10" % "1.0.3"
 
 //libraryDependencies += "org.apache.hbase" % "hbase-client" % "1.0.0-cdh5.5.4"
 //libraryDependencies += "org.apache.hbase" % "hbase-server" % "1.0.0-cdh5.5.4"
