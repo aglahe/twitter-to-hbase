@@ -18,8 +18,8 @@ object KafkaStreamReader {
 
     def main(args: Array[String]) {
 
-        if (args.length < 3) {
-            System.err.println("Usage: KafkaToHabse <broker-list> <topic> <hbase-table>")
+        if (args.length < 4) {
+            System.err.println("Usage: KafkaToHabse <broker-list> <group.id> <topic> <hbase-table>")
             System.exit(1)
         }
 
@@ -28,8 +28,8 @@ object KafkaStreamReader {
         val ssc = new StreamingContext(conf, Milliseconds(500))
 
         println("Set up Kafka Parms..")
-        val Array(brokers, topic, hbaseTable) = args
-        val kafkaParams = Map[String, String]("metadata.broker.list" -> brokers)
+        val Array(brokers, groupid, topic, hbaseTable) = args
+        val kafkaParams = Map[String, String]("metadata.broker.list" -> brokers, "group.id" -> groupid)
         val topics = Set[String](topic)
 
         println("Setting up stream...")
