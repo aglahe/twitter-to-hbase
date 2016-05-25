@@ -53,6 +53,7 @@ object KafkaStreamReader {
         })
 
         // Start the fun
+        println("Start processing...")
         ssc.start()
         ssc.awaitTermination()
     }
