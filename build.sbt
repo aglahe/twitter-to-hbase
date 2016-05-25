@@ -22,6 +22,7 @@ libraryDependencies += "org.apache.spark" %% "spark-streaming-kafka" % "1.6.1"
 
 libraryDependencies += "org.json4s" %% "json4s-jackson" % "3.2.11"
 
+libraryDependencies += "log4j" % "log4j" % "1.2.17"
 libraryDependencies +=  "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 
 resolvers += "cloudera-repos" at "https://repository.cloudera.com/artifactory/cloudera-repos/"

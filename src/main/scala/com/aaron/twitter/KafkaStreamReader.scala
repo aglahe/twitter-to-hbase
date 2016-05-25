@@ -12,6 +12,8 @@ import org.apache.spark.streaming.kafka.KafkaUtils
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
 
+import org.apache.log4j.{Level, Logger}
+
 import it.nerdammer.spark.hbase._
 
 object KafkaStreamReader {
@@ -43,11 +45,12 @@ object KafkaStreamReader {
 
                 // Create KV RDD with _1 being the rowkey
                 // We need to put the formats = DefaultFormats in here because of a bug in json4s 3.2.10/11
+                // Also we needed to define MessageDigest here
                 val kvRdd = jsonRdd.map(v => {implicit val formats = DefaultFormats;
-                    (DatatypeConverter.printHexBinary(MessageDigest.getInstance("MD5").digest((v._1\"user"\"id").extract[String].getBytes))+"."+(v._1\"id").extract[String],
-                     v._2)})
+                    (DatatypeConverter.printHexBinary(md5((v._1\"user"\"id").extract[String]))+"."+(v._1\"id").extract[String], v._2)})
 
                 // Write to HBase
+                println("writing 1st rowkey: "+ kvRdd.first()._1)
                 kvRdd.toHBaseTable(hbaseTable).toColumns("data").inColumnFamily("d").save()
             }
         })
@@ -56,5 +59,9 @@ object KafkaStreamReader {
         println("Start processing...")
         ssc.start()
         ssc.awaitTermination()
+    }
+
+    def md5(s: String) = {
+        MessageDigest.getInstance("MD5").digest(s.getBytes)
     }
 }
