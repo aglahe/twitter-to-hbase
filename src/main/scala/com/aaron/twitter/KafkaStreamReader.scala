@@ -24,7 +24,7 @@ object KafkaStreamReader {
         }
 
         println("Setting up conf...")
-        val conf = new SparkConf().setAppName("Twitter Kafka Reader")
+        val conf = new SparkConf().setAppName("Twitter to HBase")
         val ssc = new StreamingContext(conf, Milliseconds(500))
 
         println("Set up Kafka Parms..")
@@ -44,14 +44,15 @@ object KafkaStreamReader {
                 // Create KV RDD with _1 being the rowkey
                 // We need to put the formats = DefaultFormats in here because of a bug in json4s 3.2.10/11
                 val kvRdd = jsonRdd.map(v => {implicit val formats = DefaultFormats;
-                    (DatatypeConverter.printHexBinary(MessageDigest.getInstance("MD5").digest((v._1\"user"\"id").extract[String].getBytes))+"."+(v._1\"id").extract[String], v._2)})
+                    (DatatypeConverter.printHexBinary(MessageDigest.getInstance("MD5").digest((v._1\"user"\"id").extract[String].getBytes))+"."+(v._1\"id").extract[String],
+                     v._2)})
 
                 // Write to HBase
                 kvRdd.toHBaseTable(hbaseTable).toColumns("data").inColumnFamily("d").save()
             }
         })
 
-        // Start the computation
+        // Start the fun
         ssc.start()
         ssc.awaitTermination()
     }
