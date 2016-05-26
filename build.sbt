@@ -25,4 +25,3 @@ libraryDependencies += "log4j" % "log4j" % "1.2.17"
 libraryDependencies +=  "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 
 resolvers += "cloudera-repos" at "https://repository.cloudera.com/artifactory/cloudera-repos/"
-javacOptions ++= Seq("-source", "1.7", "-target", "1.7", "-Xlint")
