@@ -25,16 +25,17 @@ object KafkaStreamReader extends LogHelper {
             System.exit(1)
         }
 
-        logger.debug("Setting up conf...")
+        logger.info("Setting up conf...")
         val conf = new SparkConf().setAppName("Twitter to HBase")
         val ssc = new StreamingContext(conf, Milliseconds(500))
 
-        logger.debug("Set up Kafka Parms..")
+        logger.info("Set up Kafka Parms..")
         val Array(brokers, groupid, topic, hbaseTable) = args
+//        val kafkaParams = Map[String, String]("metadata.broker.list" -> brokers, "group.id" -> groupid,  "auto.offset.reset" -> "smallest")
         val kafkaParams = Map[String, String]("metadata.broker.list" -> brokers, "group.id" -> groupid)
         val topics = Set[String](topic)
 
-        logger.debug("Setting up stream...")
+        logger.info("Setting up stream...")
         val stream = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, topics)
 
         // Get the value, and convert the RDD[String] into a DataFrame using JSON
@@ -58,7 +59,7 @@ object KafkaStreamReader extends LogHelper {
         })
 
         // Start the fun
-        logger.debug("Start processing...")
+        logger.info("Start processing...")
         ssc.start()
         ssc.awaitTermination()
     }
@@ -70,5 +71,4 @@ object KafkaStreamReader extends LogHelper {
 
 trait LogHelper {
     lazy val logger = Logger.getLogger(getClass.getName)
-
 }
